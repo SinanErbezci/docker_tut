@@ -84,7 +84,97 @@ docker run nginx -d (detached)
 For all of them, can be either the container id or the container name. Same for images
 
 ### 2. Running and Stopping Containers
-Ubuntu with tty
+Ubuntu with tty(-t) and interactive(-i)
 ```
-docker run -t ubuntu 
+docker run -it ubuntu 
+```
+```
+docker run -d -it --name looper ubuntu sh -c "while true; do date; sleep 1; done"
+```
+check the output logs 
+```
+docker logs -f <container-name>
+```
+pausing the container
+```
+docker pause looper
+```
+unpausing the container
+```
+docker unpause looper
+```
+bring the containers process to foreground
+```
+docker attach looper
+```
+Control+C container will be terminated
+
+Making sure dont closing the container from another terminal
+```
+docker attach --no-stdin looper
+```
+
+execute commands withing a running container
+```
+docker exec looper ls -la
+```
+execute bash in the container
+```
+docker exec -it looper bash
+```
+
+kill the container
+```
+docker kill looper
+docker rm looper
+# or just docker rm --force looper
+```
+remove it auto after it's exited.
+```
+docker run -d --rm -it -name looper-it ubuntu sh -c "while true; do date, sleep 1; done"
+```
+control+p, control+q to detach us from the STDOUT.
+
+### 3. Indepth review of Images
+
+We can search for images in the Docker Hub with ```docker search```
+
+Pulling different version of an image
+```
+docker pull ubuntu:<version>
+```
+Taggin is also way to rename images.
+```
+docker tag ubuntu:25.04 ubuntu:example
+```
+
+#### Building Images
+Dockerfile is simply a file that contains the build instructions for an image.
+
+Alpine is  a small Linux distribution that is often used to create small images.
+
+We will choose exactly which version of a given image we want to use. This guarantees that we don't accidentally update through a breaking change, and we know which images need updating when there are known security vulnerabilities in old images.
+
+We can use the command docker build(opens in a new tab)(opens in a new tab) to turn the Dockerfile to an image.
+
+By default docker build will look for a file named Dockerfile. Now we can run docker build with instructions where to build (.) and give it a name (-t <name>)
+```
+docker build -t hello-docker .
+```
+
+It is also possible to manually create new layers on top of an image. Let us now create a new file called additional.txt and copy it inside a container.
+```
+docker cp ./addition.txt blissful_jepsen:/usr/src/app
+```
+Check out what changed in our container. (A -> added, C -> changed, D -> deleted)
+```
+docker diff blissful_jepsen
+```
+saving the changes. (or just change the dockerfile)
+```
+docker commit blissful_jepsen hello-docker-addition
+```
+Naming your dockerfiles
+```
+docker build -t tester -f Dockerfile.testing .
 ```
