@@ -155,11 +155,14 @@ Alpine is  a small Linux distribution that is often used to create small images.
 
 We will choose exactly which version of a given image we want to use. This guarantees that we don't accidentally update through a breaking change, and we know which images need updating when there are known security vulnerabilities in old images.
 
-We can use the command docker build(opens in a new tab)(opens in a new tab) to turn the Dockerfile to an image.
+We can use the command docker build to turn the Dockerfile to an image.
 
 By default docker build will look for a file named Dockerfile. Now we can run docker build with instructions where to build (.) and give it a name (-t <name>)
 ```
 docker build -t hello-docker .
+```
+```
+docker run -it hello-docker sh
 ```
 
 It is also possible to manually create new layers on top of an image. Let us now create a new file called additional.txt and copy it inside a container.
@@ -177,4 +180,51 @@ docker commit blissful_jepsen hello-docker-addition
 Naming your dockerfiles
 ```
 docker build -t tester -f Dockerfile.testing .
+```
+
+### Defining Start Conditions
+This time we will open up an interactive session and test stuff before "storing" it in our Dockerfile.
+```
+docker run -it ubuntu:24.04
+```
+Install curl
+```
+apt-get update && apt-get install -y curl
+```
+Since we know that an && requires both expressions to be true, we can use this knowledge to chain bash commands that we only want to run in succession if the first command was successful.
+
+```
+curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o /usr/local/bin/yt-dlp
+```
+```
+chmod a+rx /usr/local/bin/yt-dlp 
+```
+```
+apt-get install -y python3 ffmpeg
+```
+Now add all these to dockerfile.
+
+We should always try to keep the most prone-to-change rows at the bottom, by adding the instructions to the bottom we can preserve our cached layers.
+
+The argument we give to docker run <> <argument> will replace the CMD command. Therefore we need an ENTRYPOINT. It will add our commands to it.
+
+By default, the entrypoint in Docker is set as /bin/sh -c and this is passed if no entrypoint is set. This is why giving the path to a script file as CMD works.
+
+There are two ways to set the ENTRYPOINT and CMD: exec form and shell form. We have been using the exec form, in which the command itself is executed. The exec form is generally preferred over the shell form, because in the shell form the command that is executed is wrapped with /bin/sh -c, which can result in unexpected behaviour. However, the shell form can be useful in certain situations, for example, when you need to evaluate environment variables in the command like $MYSQL_PASSWORD or similar.
+
+In the shell form, the command is provided as a string without brackets. In the exec form the command and its arguments are provided as a list (with brackets)
+
+shell form
+```
+ENTRYPOINT /bin/ping -c 3
+```
+
+Now we have two problems with the yt-dlp project:
+
+Major: The downloaded files stay in the container
+Minor: Our container build process creates many layers resulting in increased image size
+
+Docker cp command to copy the file from the container to the host machine. We should use quotes now since the filename has spaces.
+```
+docker cp "naughty_kirch://mydir/Burden Of Dreams V17 Nalle Hukkataival [uTZSILGTskA].webm" .
 ```

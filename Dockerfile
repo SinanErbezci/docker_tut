@@ -8,7 +8,7 @@ WORKDIR /usr/src/app
 COPY hello.sh .
 
 # You can add execution permission here 
-# RUN chmod +x hello.sh
+RUN chmod +x hello.sh
 
 RUN touch addition.txt
 
