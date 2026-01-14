@@ -228,3 +228,45 @@ Docker cp command to copy the file from the container to the host machine. We sh
 ```
 docker cp "naughty_kirch://mydir/Burden Of Dreams V17 Nalle Hukkataival [uTZSILGTskA].webm" .
 ```
+
+### Volumes and Ports
+We can use Docker volumes to make it easier to store the downloads outside the container's ephemeral storage.
+With bind mount we can mount a file or directory from our own machine into the container.
+
+We mount our current folder as /mydir in the container, overwriting everything that we have put in that folder in our Dockerfile.
+```
+# Binding a Folder
+docker run -v "$(pwd):/mydir" yt-dlp https://www.youtube.com/watch?v=saEpkcVi1d4 
+```
+```
+# Binding a File (File must exists)
+docker run \
+  -v "$(pwd)/text.log:/usr/src/app/text.log" \
+  devopsdockeruh/simple-web-service
+```
+A Docker volume is essentially a shared directory or 
+file between the host machine and the container.
+
+* The changes are preserverd.
+* File sharing between containers. 
+
+It is possible to map a port on your host machine to a container port. For example, if you map port 1000 on your host machine to port 2000 in the container, and then send a message to http://localhost:1000 on your computer, the container will receive that message if it's listening to its port 2000.
+
+Opening a connection from the outside world to a Docker container happens in two steps:
+
+* Exposing port (Container listens to a port)
+* Publishing port (mapping host ports to container ports)
+
+To expose a port, add the line EXPOSE <port> in your Dockerfile
+
+```
+# publish a port. <host-port>:<container-port>
+# If you leave out host port, it auto select available port
+docker run -p 4567 app-in-port
+```
+
+Limit connections to certain protocol EXPOSE <port>/udp
+
+```
+docker run -p 8080:8080 devopsdockeruh/simple-web-service server 
+```
