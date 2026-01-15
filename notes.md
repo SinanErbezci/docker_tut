@@ -270,3 +270,11 @@ Limit connections to certain protocol EXPOSE <port>/udp
 ```
 docker run -p 8080:8080 devopsdockeruh/simple-web-service server 
 ```
+
+### Utilizing Tools from Registry
+```
+docker build . -t rails-project && docker run -p 3000:3000 rails-project
+```
+Here we did a quick trick to separate installing dependencies from the part where we copy the source code in. The COPY will copy both files Gemfile and Gemfile.lock to the current directory. This will help us by caching the dependency layers if we ever need to make changes to the source code.
+
+docker build -t java-project -f Dockerfile.java . && docker run -p 8080:8080 java-project
