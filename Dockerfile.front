@@ -1,0 +1,19 @@
+FROM ubuntu:20.04
+
+WORKDIR /usr/src/app
+
+EXPOSE 5000
+
+RUN apt-get update && apt-get install -y curl
+
+RUN curl -sL https://deb.nodesource.com/setup_16.x | bash && apt install -y nodejs
+
+COPY ./material-applications/example-frontend/package* ./
+
+RUN npm install && npm install -g serve
+
+COPY ./material-applications/example-frontend .
+
+RUN npm run build
+
+CMD ["serve", "-s", "-l", "5000", "build"]

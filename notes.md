@@ -131,7 +131,7 @@ docker rm looper
 ```
 remove it auto after it's exited.
 ```
-docker run -d --rm -it -name looper-it ubuntu sh -c "while true; do date, sleep 1; done"
+docker run -d --rm -it --name looper-it ubuntu sh -c "while true; do date; sleep 1; done"
 ```
 control+p, control+q to detach us from the STDOUT.
 
