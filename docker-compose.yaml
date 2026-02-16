@@ -1,0 +1,7 @@
+services:
+  yt-dlp-ubuntu:
+    image: sinanerbezci/youtube-dl
+    build: ./yt-dlp
+    volumes:
+      - .:/mydir
+    container_name: yt-dlp

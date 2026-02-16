@@ -291,3 +291,29 @@ docker tag yt-dlp <username>/<repository>
 ```
 docker push <username>/<repository>
 ```
+
+# Docker Compose
+Simplifies running multiple containers.
+
+```
+docker compose [-f <arg>...] [options] [COMMAND] [ARGS...]
+```
+
+```
+services:
+  frontend:
+    image: example/webapp
+    # Either giving directory where dockerfile exists
+    build: ./webapp
+
+  backend:
+    image: example/database
+    # Or giving full details
+    build:
+      context: backend
+      dockerfile: ../backend.Dockerfile
+    volumes:
+    # location-in-host:location-in-container
+      - .:/mydir
+    container_name: yt-dlp
+```
