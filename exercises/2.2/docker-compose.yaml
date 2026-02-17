@@ -1,0 +1,6 @@
+services:
+  web-service:
+    image: devopsdockeruh/simple-web-service
+    ports:
+      - 8000:8080
+    command: ["executable", "arg"]

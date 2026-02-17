@@ -317,3 +317,32 @@ services:
       - .:/mydir
     container_name: yt-dlp
 ```
+
+## Using Ready Image with Docker Compose
+
+This way "build" is not needed.
+```
+services:
+  nginx:
+    image: nginx:1.27
+  database:
+    image: postgres:17
+```
+
+## Key Commands in Docker Compose
+To start all services defined in docker-compose.yaml file
+```
+docker compose up
+```
+To stop and remove services
+```
+docker compose down
+```
+view logs
+```
+docker compose logs
+```
+list services
+```
+docker compose ps
+```
