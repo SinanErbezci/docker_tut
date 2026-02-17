@@ -346,3 +346,52 @@ list services
 ```
 docker compose ps
 ```
+
+# Docker Networking
+Docker compose automatically creates and joins both containers into a network with a DNS.
+
+Each service is named after the name given in the docker-compose.yaml file. As such, containers can reference each other simply with their service names, which is different from the container name.
+
+## Manual Network Configuration
+It is also possible to define the network manually in a Docker Compose file. A major benefit of a manual network definition is that it makes it easy to set up a configuration where containers defined in two different Docker Compose files share a network and can easily interact with each other.`
+services:
+  db:
+    image: postgres:13.2-alpine
+    networks:
+      - database-network # Name in this Docker Compose file
+
+networks:
+  database-network: # Name in this Docker Compose file
+    name: database-network # Name that will be the actual name of the network
+
+# In other compose.yaml
+networks:
+  database-network:
+    external:
+      name: database-network
+```
+
+By default all services are added to a network called default. The default network can be configured and this makes it possible to connect to an external network by default as well:
+
+```
+networks:
+  default:
+    external:
+      name: database-network
+```
+
+# Scaling
+Docker compose can scale the instances.
+```
+docker compose up --scale whoami:3
+```
+
+To look which port the instance communicating
+```
+docker compose port --index 1 whoami 8000
+```
+
+## Load Balancer
+For local enviroment(or single server) nginx-proxy is good solution
+
+## Docker Managaed volumes

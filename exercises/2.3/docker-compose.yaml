@@ -1,0 +1,11 @@
+services:
+  front-end:
+    image: frontend:latest
+    ports:
+      - 5000:5000
+  
+  back-end:
+    image: backend:latest
+    ports:
+      - 8080:8080
+  
