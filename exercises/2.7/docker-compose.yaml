@@ -1,0 +1,30 @@
+services:
+  back-end: 
+    image: backend:latest
+    ports:
+      - 8080:8080
+    restart: unless-stopped
+    environment: 
+      REDIS_HOST: redis
+      POSTGRES_HOST: db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: example
+      POSTGRES_DATABASE: postgres
+
+  
+  front-end:
+    image: frontend:latest
+    ports:
+      - 5000:5000
+  
+  redis:
+    image: redis:7-alpine
+
+  db:
+    image: postgres:17
+    restart: unless-stopped
+    environment:
+      POSTGRES_PASSWORD: example
+    container_name: db_postgres
+    volumes:
+      - ./database:/var/lib/postgresql/data

@@ -1,0 +1,37 @@
+services:
+  backend: 
+    image: backend:latest
+    restart: unless-stopped
+    environment:
+      REDIS_HOST: redis
+      POSTGRES_HOST: db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: example
+      POSTGRES_DATABASE: postgres
+
+  
+  frontend:
+    image: frontend:latest
+
+  redis:
+    image: redis:7-alpine
+
+  db:
+    image: postgres:17
+    restart: unless-stopped
+    environment:
+      POSTGRES_PASSWORD: example
+    container_name: db_postgres
+    volumes:
+      - ./database:/var/lib/postgresql/data
+
+  reverse-proxy:
+    image: nginx
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+      - frontend
+    

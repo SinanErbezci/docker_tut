@@ -394,4 +394,14 @@ docker compose port --index 1 whoami 8000
 ## Load Balancer
 For local enviroment(or single server) nginx-proxy is good solution
 
-## Docker Managaed volumes
+## Docker Managed volumes
+There are two ways of mounting data. First one is the one we did earlier where we specified host directory for storing data.
+
+The second one is Docker managed volume.
+
+Let's inspect if there was a volume created with docker container inspect db_redmine | grep -A 5 Mounts
+
+Inspect the changes
+```
+docker container diff $(docker compose ps -q redmine)
+```
