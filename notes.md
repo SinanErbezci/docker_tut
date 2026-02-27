@@ -405,3 +405,5 @@ Inspect the changes
 ```
 docker container diff $(docker compose ps -q redmine)
 ```
+
+# CI/CD Pipeline
