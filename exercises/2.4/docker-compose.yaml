@@ -1,11 +1,11 @@
 services:
   front-end:
-    image: frontend:latest
+    image: front-end:latest
     ports:
-      - 5000:5000
+      - 5001:5001
   
   back-end:
-    image: backend:latest
+    image: back-end:latest
     ports:
       - 8080:8080
     restart: unless-stopped

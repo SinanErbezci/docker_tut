@@ -1,6 +1,6 @@
 services:
-  backend: 
-    image: backend:latest
+  back-end: 
+    image: back-end:latest
     restart: unless-stopped
     environment:
       REDIS_HOST: redis
@@ -8,10 +8,9 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: example
       POSTGRES_DATABASE: postgres
-
   
-  frontend:
-    image: frontend:latest
+  front-end:
+    image: front-end:latest
 
   redis:
     image: redis:7-alpine
@@ -32,6 +31,6 @@ services:
     ports:
       - "80:80"
     depends_on:
-      - backend
-      - frontend
+      - back-end
+      - front-end
     
