@@ -405,5 +405,14 @@ Inspect the changes
 ```
 docker container diff $(docker compose ps -q redmine)
 ```
+# Security and Optimazation
+## Checking Digest value
+```bash
+docker image ls --digests
+``` 
+## Checking image history
+```bash
+docker image history --no-trunc ubuntu:24.04
+```
 
 # CI/CD Pipeline
