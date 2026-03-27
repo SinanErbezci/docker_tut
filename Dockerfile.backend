@@ -14,5 +14,9 @@ COPY ./material-applications/example-backend .
 
 RUN go build
 
+RUN useradd -m appuser
+
+USER appuser
+
 CMD ["./server", "."]
 

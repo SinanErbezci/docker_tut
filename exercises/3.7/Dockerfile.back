@@ -1,0 +1,20 @@
+FROM golang:1.25-alpine3.23
+
+WORKDIR /usr/src/app
+
+EXPOSE 8080
+
+ENV PATH="/usr/local/go/bin:${PATH}" PORT=8080 REQUEST_ORIGIN=http://localhost:5000
+
+COPY ./material-applications/example-backend/go.mod ./material-applications/example-backend/go.sum ./
+RUN go mod download
+
+COPY ./material-applications/example-backend ./
+
+RUN go build -ldflags="-s -w" -o server && \
+    adduser -D appuser && \
+    chown -R appuser:appuser /usr/src/app
+
+USER appuser
+
+CMD ["./server", "."]

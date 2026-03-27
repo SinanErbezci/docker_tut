@@ -1,0 +1,20 @@
+FROM node:16.20.2-alpine3.18 AS builder
+
+WORKDIR /usr/src/app
+
+COPY ./material-applications/example-frontend/package*.json ./
+RUN npm install
+
+COPY ./material-applications/example-frontend ./
+
+ENV REACT_APP_BACKEND_URL=/api
+
+RUN npm run build
+
+
+# Runtime stage
+FROM nginx:alpine
+
+EXPOSE 80
+
+COPY --from=builder /usr/src/app/build /usr/share/nginx/html

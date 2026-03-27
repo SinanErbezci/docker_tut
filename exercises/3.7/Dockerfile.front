@@ -1,0 +1,25 @@
+FROM node:16.20.2-alpine3.18
+
+WORKDIR /usr/src/app
+
+EXPOSE 5001
+
+COPY ./material-applications/example-frontend/package*.json ./
+
+RUN npm install && \
+    npm install -g serve && \
+    npm cache clean --force
+
+COPY ./material-applications/example-frontend ./
+
+ENV REACT_APP_BACKEND_URL=http://localhost/api
+
+RUN npm run build && \
+    adduser -D appuser && \
+    chown -R appuser:appuser /usr/src/app
+
+USER appuser
+
+CMD ["serve", "-s", "-l", "5001", "build"]
+
+# docker build -t front-end -f Dockerfile.front . && docker run -p 5001:5001 front-end

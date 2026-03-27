@@ -1,0 +1,24 @@
+FROM ubuntu:20.04
+
+WORKDIR /usr/src/app
+
+EXPOSE 8080
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends wget ca-certificates && \
+    wget -q https://go.dev/dl/go1.16.15.linux-amd64.tar.gz && \
+    tar -C /usr/local -xzf go1.16.15.linux-amd64.tar.gz && \
+    rm -f go1.16.15.linux-amd64.tar.gz && \
+    apt-get purge -y wget && \
+    apt-get autoremove -y && \
+    rm -rf /var/lib/apt/lists/*
+
+ENV PATH="/usr/local/go/bin:${PATH}" PORT=8080 REQUEST_ORIGIN=http://localhost:5000
+
+COPY ./material-applications/example-backend .
+
+RUN go build -ldflags="-s -w" -o server && useradd -m appuser
+
+USER appuser
+
+CMD ["./server", "."]
