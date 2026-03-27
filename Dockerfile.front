@@ -2,7 +2,7 @@ FROM ubuntu:20.04
 
 WORKDIR /usr/src/app
 
-EXPOSE 5000
+EXPOSE 5001
 
 RUN apt-get update && apt-get install -y curl
 
@@ -14,7 +14,7 @@ RUN npm install && npm install -g serve
 
 COPY ./material-applications/example-frontend .
 
-ENV REACT_APP_BACKEND_URL=http://localhost:8080
+ENV REACT_APP_BACKEND_URL=http://localhost/api
 
 RUN useradd -m appuser
 
@@ -22,4 +22,6 @@ USER appuser
 
 RUN npm run build
 
-CMD ["serve", "-s", "-l", "5000", "build"]
+CMD ["serve", "-s", "-l", "5001", "build"]
+
+# docker build -t front-end -f Dockerfile.front . && docker run -p 5001:5001 front-end
